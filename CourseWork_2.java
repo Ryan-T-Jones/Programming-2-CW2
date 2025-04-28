@@ -10,9 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*; 
 import javax.swing.*;
-
-import coursework.CourseWork_2.Expense;
-
 import java.awt.*;
 
 public class CourseWork_2 {
@@ -21,18 +18,22 @@ public static class Room
 {
 	private int Room_Number;
 	private String Room_Location;
-	private ArrayList<Room_Ocupied> Room_Ocupied_ID;
+	private ArrayList<String> Room_Ocupied_Date;
 	
-	public Room(int Room_Number,String Room_Location) 
+	public Room(int Room_Number,String Room_Location, ArrayList<String> Room_Ocupied_Date) 
 	{
 		this.Room_Number=Room_Number;
 		this.Room_Location=Room_Location;
+		this.Room_Ocupied_Date=Room_Ocupied_Date;
 	}
     public int Get_Room_Number() {
     	return Room_Number;}
     public String Get_Room_Location() {
     	return Room_Location;}
+    public ArrayList<String> Get_Room_Ocupied_Date() {
+    	return Room_Ocupied_Date;}
 }
+/*
 public static class Room_Ocupied
 {
 	private int Room_Ocupied_ID;
@@ -46,16 +47,14 @@ public static class Room_Ocupied
 		this.Ocupied_User=Ocupied_User;	
 	}
 }
-
+*/
 public static void main(String args[]) 
 { 
-	System.out.println("hello");
 	ArrayList<Room> All_Rooms = new ArrayList<Room>();
-    To_Do_List_Upload(All_Rooms);
-    System.out.println("testing: " + All_Rooms.toString());
+    Rooms_Upload(All_Rooms);
 	Interface(All_Rooms);
 }
-
+/*
 public void Room_Details() 
 {
 	Scanner Inputs= new Scanner(System.in);
@@ -66,7 +65,7 @@ public void Room_Details()
 	new Room(Room_Number, Room_Location);
 	Inputs.close();
 }
-
+*/
 public static void Interface(ArrayList<Room>All_Rooms)
 {
 	JFrame Intro_Frame = new JFrame();
@@ -75,43 +74,71 @@ public static void Interface(ArrayList<Room>All_Rooms)
 	Intro_Frame.setSize(500,500);
 	Intro_Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel Input_Panel=new JPanel();
+	
 	//input panel
+	
 	Input_Panel.setLayout(new BoxLayout(Input_Panel,BoxLayout.Y_AXIS));
 	
+	
+	
 	JComboBox Room_Location_Choice = new JComboBox();
-	for(Room Room_Detail:All_Rooms) 
+	ArrayList<String> Room_Locations_Array = new ArrayList<String>();
+	for(Room Room_Detail:All_Rooms)
 	{
-		Room_Location_Choice.addItem(Room_Detail.Get_Room_Location());}
+		if(!Room_Locations_Array.contains(Room_Detail.Get_Room_Location()))
+		{
+			Room_Location_Choice.addItem(Room_Detail.Get_Room_Location());
+		}
+		Room_Locations_Array.add(Room_Detail.Get_Room_Location());
+	}
 	Input_Panel.add(Room_Location_Choice);
 	
-	JComboBox Room_ID_Choice = new JComboBox();
-	Input_Panel.add(Room_ID_Choice);
+	JComboBox Room_Number_Choice = new JComboBox();
+	Input_Panel.add(Room_Number_Choice);
 	Room_Location_Choice.addActionListener(new ActionListener(){
     	@Override
         public void actionPerformed(ActionEvent e) {
+    		Room_Number_Choice.removeAllItems();
     		for(Room Room_Detail:All_Rooms) 
     		{
-    			if(Room_Detail.Get_Room_Location()==Room_Location_Choice.getSelectedItem())
+    			if(Room_Detail.Get_Room_Location().equals(Room_Location_Choice.getSelectedItem()))
     			{
-    				Room_ID_Choice.addItem(Room_Detail.Get_Room_Number());
+    				Room_Number_Choice.addItem(Room_Detail.Get_Room_Number());
     			}
     		}
     	}
     });
-	
-	
-	JTextField Room_ID=new JTextField("Input room ID");
-	JTextField Room_Location=new JTextField("Input room Location");//change to drop down option
 	JButton Submit=new JButton("Submit");
-	Input_Panel.add(Room_ID);
-	Input_Panel.add(Room_Location);
 	Input_Panel.add(Submit);
 	Intro_Frame.add(Input_Panel);
 	Intro_Frame.revalidate();
 	
-	//time select panel
 	
+	
+	ArrayList<String> Room_Ocupied_Dates = new ArrayList<String>();
+	
+	Submit.addActionListener(new ActionListener(){
+    	@Override
+        public void actionPerformed(ActionEvent e) {
+    		//check then save
+    		Intro_Frame.remove(Input_Panel);
+    		//String Room_Data=(String)Room_Location_Choice.getSelectedItem()+"/"+Room_Number_Choice.getSelectedItem();
+    		String Room_Data=Room_Number_Choice.getSelectedItem()+"/"+(String)Room_Location_Choice.getSelectedItem()+"/";
+    		Intro_Frame.revalidate();
+    		for(Room Room_Detail:All_Rooms) 
+    		{
+    			if(Room_Detail.Get_Room_Number()==(int)Room_Number_Choice.getSelectedItem()){
+    				Room_Ocupied_Dates.addAll(Room_Detail.Get_Room_Ocupied_Date());}
+    		}
+    		Interface_Time(Intro_Frame,All_Rooms,Room_Ocupied_Dates,Room_Data);
+        }
+    });
+}
+public static void Interface_Time(Frame Intro_Frame,ArrayList<Room>All_Rooms,ArrayList<String>Room_Ocupied_Dates,String Room_Data)
+{
+	//time select panel
 	JPanel Time_Panel=new JPanel(new GridLayout(0,7,5,5));
+	Intro_Frame.add(Time_Panel);
 	Calendar c = Calendar.getInstance(); 
 	ArrayList<String> Date_Slot_Array = new ArrayList<String>();
 	
@@ -125,6 +152,9 @@ public static void Interface(ArrayList<Room>All_Rooms)
 		Time_Panel.add(Date);
 	}
 
+	
+	
+	
 	ButtonGroup Button_Group = new ButtonGroup();
 	ArrayList<JButton> Time_Slot_Array = new ArrayList<JButton>();
 	ArrayList<String> Selected_Time_Slot = new ArrayList<String>();
@@ -139,21 +169,28 @@ public static void Interface(ArrayList<Room>All_Rooms)
 			Button_Group.add(Time_Slot_Button);
 			Time_Panel.add(Time_Slot_Button);
 			Time_Slot_Array.add(Time_Slot_Button);
-			int Date_Number=Date_Loop;
+
+			String Date=Date_Slot_Array.get(Date_Loop);
+			Selected_Time_Slot.set(0,Selected_Time+Date);
+			
+			if (Room_Ocupied_Dates.contains(Selected_Time_Slot.get(0))) {
+			    Time_Slot_Button.setEnabled(false);}
+
 			Time_Slot_Button.addActionListener(new ActionListener(){
 		    	@Override
 		        public void actionPerformed(ActionEvent e) {
 		    		for (JButton Buttons : Time_Slot_Array) {
 		    			Buttons.setBackground(null);
-                    }	    		
-		    		String Date=Date_Slot_Array.get(Date_Number);
-		    		Selected_Time_Slot.set(0,Selected_Time+Date);
-                    System.out.println("Selected Time Slot: " + Selected_Time_Slot);
+                    }	    	
+		    		Selected_Time_Slot.set(0,Selected_Time+Date);	
                     Time_Slot_Button.setBackground(Color.GREEN);
 		        }
 		    });
 		}
 	}  
+	
+	
+	
 	
 	JButton Submission=new JButton("Submit");
 	Time_Panel.add(Submission);
@@ -164,36 +201,39 @@ public static void Interface(ArrayList<Room>All_Rooms)
     		//check then save
     		Intro_Frame.remove(Time_Panel);
     		Intro_Frame.revalidate();
-    		System.out.println("Final Selected Time Slot: " + Selected_Time_Slot);
-        }
-    });
-	
-	Submit.addActionListener(new ActionListener(){
-    	@Override
-        public void actionPerformed(ActionEvent e) {
-    		//check then save
-    		Intro_Frame.remove(Input_Panel);
-    		Intro_Frame.revalidate();
-    		Intro_Frame.add(Time_Panel);
+    		Rooms_Save(Selected_Time_Slot,Room_Data);
         }
     });
 }
 
-/*
-public void To_Do_List_Save(String Selected_Time_Slot) 
+
+public static void Rooms_Save(ArrayList<String> Selected_Time_Slot,String Room_Data) 
 {
     try {
-    	FileWriter Task_Files = new FileWriter("CourseWork_2_Extra\\Rooms.txt",true);
-        BufferedWriter File_Writer = new BufferedWriter(Task_Files);
-        File_Writer.write(Selected_Time_Slot);//say where to write
-        File_Writer.close();
-    } catch (IOException e) {
-    	e.printStackTrace();
-    }
-}
-*/
+    	String Saving = String.join("/", Selected_Time_Slot);
+    	File Old_File = new File("CourseWork_2_Extra\\Rooms");
+    	File Temp_File = new File("CourseWork_2_Extra\\Temp_Rooms");
+    		
+    	FileWriter File_Writer = new FileWriter(Temp_File);
+        BufferedWriter Buffered_Writer = new BufferedWriter(File_Writer);
 
-public static void To_Do_List_Upload(ArrayList<Room>All_Rooms) 
+    	Scanner File_Reader = new Scanner(Old_File);
+    	while (File_Reader.hasNextLine()) {
+    		String Line = File_Reader.nextLine();
+    		if (Line.contains(Room_Data)) {
+    			Buffered_Writer.write(Line +"/"+Saving+"\n");}
+    		else {
+    			Buffered_Writer.write(Line +"\n");}
+    	}
+    	File_Reader.close();
+    	Buffered_Writer.close();
+    	Old_File.delete();
+    	Temp_File.renameTo(Old_File);
+    }catch (Exception e) {
+    	e.printStackTrace();}
+}
+
+public static void Rooms_Upload(ArrayList<Room>All_Rooms) 
 {
 	try {
 		File File = new File("CourseWork_2_Extra\\Rooms");
@@ -203,13 +243,16 @@ public static void To_Do_List_Upload(ArrayList<Room>All_Rooms)
             return;
         }
         else {
-        	while (File_Reader.hasNextLine()) {
+        	while (File_Reader.hasNextLine()) 
+        	{
         		String Rooms = File_Reader.nextLine();
         		String[] Room_Features = Rooms.split("/");
         		int Room_ID = Integer.parseInt(Room_Features[0]);
         		String Room_Location = Room_Features[1];
-        		//int Room_Ocupied_ID = Integer.parseInt(Room_Features[2]);
-        		All_Rooms.add(new Room(Room_ID,Room_Location));
+        		ArrayList<String> Room_Ocupied_Date = new ArrayList<String>();
+        		for (int i = 2; i < Room_Features.length; i++) {
+        			Room_Ocupied_Date.add( Room_Features[i]);}
+        		All_Rooms.add(new Room(Room_ID,Room_Location,Room_Ocupied_Date));
         	}
         }
 		File_Reader.close();
