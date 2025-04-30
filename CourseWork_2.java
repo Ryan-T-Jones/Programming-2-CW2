@@ -33,56 +33,30 @@ public static class Room
     public ArrayList<String> Get_Room_Ocupied_Date() {
     	return Room_Ocupied_Date;}
 }
-/*
-public static class Room_Ocupied
-{
-	private int Room_Ocupied_ID;
-	private int Ocupied_Time;
-	private String Ocupied_User;
-	
-	public Room_Ocupied(int Room_Ocupied_ID,int Ocupied_Time, String Ocupied_User) 
-	{
-		this.Room_Ocupied_ID=Room_Ocupied_ID;
-		this.Ocupied_Time=Ocupied_Time;
-		this.Ocupied_User=Ocupied_User;	
-	}
-}
-*/
+
 public static void main(String args[]) 
 { 
 	ArrayList<Room> All_Rooms = new ArrayList<Room>();
     Rooms_Upload(All_Rooms);
 	Interface(All_Rooms);
 }
-/*
-public void Room_Details() 
-{
-	Scanner Inputs= new Scanner(System.in);
-	System.out.println("What is the Room ID");
-	int Room_Number=Inputs.nextInt();
-	System.out.println("What is the Room location");
-	String Room_Location=Inputs.nextLine();
-	new Room(Room_Number, Room_Location);
-	Inputs.close();
-}
-*/
+
 public static void Interface(ArrayList<Room>All_Rooms)
 {
+	//input panel
 	JFrame Intro_Frame = new JFrame();
 	Intro_Frame.setVisible(true);
 	Intro_Frame.setTitle("Look for room");
 	Intro_Frame.setSize(500,500);
 	Intro_Frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	JPanel Input_Panel=new JPanel();
-	
-	//input panel
-	
 	Input_Panel.setLayout(new BoxLayout(Input_Panel,BoxLayout.Y_AXIS));
-	
-	
-	
+	Intro_Frame.setMaximumSize(new Dimension(600, 200));
+	//room location selection
 	JComboBox Room_Location_Choice = new JComboBox();
+	Room_Location_Choice.setPreferredSize(new Dimension(250, 60));
 	ArrayList<String> Room_Locations_Array = new ArrayList<String>();
+	
 	for(Room Room_Detail:All_Rooms)
 	{
 		if(!Room_Locations_Array.contains(Room_Detail.Get_Room_Location()))
@@ -92,8 +66,10 @@ public static void Interface(ArrayList<Room>All_Rooms)
 		Room_Locations_Array.add(Room_Detail.Get_Room_Location());
 	}
 	Input_Panel.add(Room_Location_Choice);
-	
+	//room number selection
+	Input_Panel.add(Box.createRigidArea(new Dimension(25,10)));
 	JComboBox Room_Number_Choice = new JComboBox();
+	Room_Number_Choice.setPreferredSize(new Dimension(250, 60));
 	Input_Panel.add(Room_Number_Choice);
 	Room_Location_Choice.addActionListener(new ActionListener(){
     	@Override
@@ -141,7 +117,7 @@ public static void Interface_Time(Frame Intro_Frame,ArrayList<Room>All_Rooms,Arr
 	Intro_Frame.add(Time_Panel);
 	Calendar c = Calendar.getInstance(); 
 	ArrayList<String> Date_Slot_Array = new ArrayList<String>();
-	
+	//get date
 	for (int Date_Loop = 0; Date_Loop < 7; Date_Loop++) 
 	{
 		String Date_Format = " %d:%d:%d";
@@ -151,10 +127,7 @@ public static void Interface_Time(Frame Intro_Frame,ArrayList<Room>All_Rooms,Arr
 		c.add(Calendar.DATE,1);
 		Time_Panel.add(Date);
 	}
-
-	
-	
-	
+	//create time slot buttons
 	ButtonGroup Button_Group = new ButtonGroup();
 	ArrayList<JButton> Time_Slot_Array = new ArrayList<JButton>();
 	ArrayList<String> Selected_Time_Slot = new ArrayList<String>();
@@ -190,11 +163,8 @@ public static void Interface_Time(Frame Intro_Frame,ArrayList<Room>All_Rooms,Arr
 	}  
 	
 	
-	
-	
 	JButton Submission=new JButton("Submit");
 	Time_Panel.add(Submission);
-	//actions
 	Submission.addActionListener(new ActionListener(){
     	@Override
         public void actionPerformed(ActionEvent e) {
@@ -260,32 +230,5 @@ public static void Rooms_Upload(ArrayList<Room>All_Rooms)
 		e.printStackTrace();
 	}
 }
-
-/*
-public void To_Do_List_Delete(String Remove)
-{
-	try {
-		File Old_File = new File("CourseWork_2_Extra\\Rooms.txt");
-		File Temp_File = new File("CourseWork_2_Extra\\Temp_Rooms.txt");
-		
-		FileWriter File_Writer = new FileWriter(Temp_File);
-        BufferedWriter Buffered_Writer = new BufferedWriter(File_Writer);
-
-		Scanner File_Reader = new Scanner(Old_File);
-		while (File_Reader.hasNextLine()) {
-			String Task = File_Reader.nextLine();
-			if (!Task.equals(Remove)) {
-				Buffered_Writer.write(Task +"\n");
-		}
-		}
-		File_Reader.close();
-		Buffered_Writer.close();
-		Old_File.delete();
-		Temp_File.renameTo(Old_File);
-	}catch (Exception e) {
-		e.printStackTrace();}
-}
-*/
-
 
 }
