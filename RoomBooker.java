@@ -13,9 +13,14 @@ import java.io.IOException;
 import java.util.*; 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Window;
 
-public class RoomBooker {
+public class RoomBooker extends JFrame {
 
+	public static void launch() {
+	    SwingUtilities.invokeLater(() -> new RoomBooker().setVisible(true));
+	}
+	
 public static class Room
 {
 	private int Room_Number;
@@ -49,9 +54,6 @@ public static class Room_Ocupied
 		this.Ocupied_User=Ocupied_User;	
 	}
 
-public static void launch() {
-    SwingUtilities.invokeLater(() -> new RoomBooker().setVisible(true));
-}
 
 
 public void Room_Details() 
