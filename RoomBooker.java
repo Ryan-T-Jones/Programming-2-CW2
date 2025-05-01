@@ -48,7 +48,6 @@ public static class Room_Ocupied
 		this.Ocupied_Time=Ocupied_Time;
 		this.Ocupied_User=Ocupied_User;	
 	}
-}
 
 public static void launch() {
     SwingUtilities.invokeLater(() -> new RoomBooker().setVisible(true));
@@ -211,8 +210,8 @@ public static void Rooms_Save(ArrayList<String> Selected_Time_Slot,String Room_D
 {
     try {
     	String Saving = String.join("/", Selected_Time_Slot);
-    	File Old_File = new File("CourseWork_2_Extra\\Rooms");
-    	File Temp_File = new File("CourseWork_2_Extra\\Temp_Rooms");
+    	File Old_File = new File("rooms.txt");
+    	File Temp_File = new File("Temp_rooms.txt");
     		
     	FileWriter File_Writer = new FileWriter(Temp_File);
         BufferedWriter Buffered_Writer = new BufferedWriter(File_Writer);
@@ -236,7 +235,7 @@ public static void Rooms_Save(ArrayList<String> Selected_Time_Slot,String Room_D
 public static void Rooms_Upload(ArrayList<Room>All_Rooms) 
 {
 	try {
-		File File = new File("CourseWork_2_Extra\\Rooms");
+		File File = new File("rooms.txt");
 		Scanner File_Reader = new Scanner(File);
         if (!File.exists() || File.length() == 0) {
         	File_Reader.close();
