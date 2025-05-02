@@ -1,5 +1,5 @@
-package StudentRecords;
-//imports used
+package cw2;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -11,8 +11,10 @@ import java.util.List;
 import java.util.ArrayList;
 
 
+@SuppressWarnings("serial")
 public class StudentRecords extends JFrame{
 	private DefaultListModel<String> ListModel;
+	@SuppressWarnings("unused")
 	private JList<String> TaskList;
 	private JTextField TaskField;
 	private JTable Table;
@@ -55,6 +57,7 @@ public class StudentRecords extends JFrame{
 		AddButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {	
+				@SuppressWarnings("unused")
 				String Task = TaskField.getText().trim();
 				AddStudent();
 			
@@ -160,10 +163,9 @@ public class StudentRecords extends JFrame{
 		public String getGrade() {return Grade;}
 		}
 			
-		public static void main(String[] args) {
-			SwingUtilities.invokeLater(()->new StudentRecords().setVisible(true));
-		}
+	public static void launch() {
+	    SwingUtilities.invokeLater(() -> new StudentRecords().setVisible(true));
+	}
 	}
 	
 	
-

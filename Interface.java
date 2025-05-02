@@ -1,0 +1,55 @@
+package cw2;
+
+import javax.swing.*;
+import java.awt.*;
+
+public class Interface {
+
+    public static void main(String[] args) {
+        //Creates main frame for UI
+        JFrame frame = new JFrame("Smart Campus Management System");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(600, 300);
+        frame.setLayout(new BorderLayout());
+
+        //Title at the top
+        JLabel heading = new JLabel("Smart Campus Management System", SwingConstants.CENTER);
+        heading.setFont(new Font("Arial", Font.BOLD, 20));
+        heading.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        frame.add(heading, BorderLayout.NORTH);
+
+        //Panel to hold buttons
+        JPanel buttonPanel = new JPanel(new GridLayout(2, 2, 15, 15));
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(10, 20, 20, 20));
+
+        //Buttons
+        JButton studentRecordsBtn = new JButton("Manage Student Records");
+        JButton scheduleRoomsBtn = new JButton("Schedule a Room");
+        JButton trackResourcesBtn = new JButton("Track Campus Resources");
+        JButton userPortalBtn = new JButton("Staff and Student Interface");
+
+        //Opens modules
+        studentRecordsBtn.addActionListener(e -> openModule("Student Records Module"));
+        scheduleRoomsBtn.addActionListener(e -> openModule("Room Scheduling Module"));
+        trackResourcesBtn.addActionListener(e -> openModule("Campus Resources Module"));
+        userPortalBtn.addActionListener(e -> openModule("Staff/Student Portal"));
+
+        //Adds buttons to panel
+        buttonPanel.add(studentRecordsBtn);
+        buttonPanel.add(scheduleRoomsBtn);
+        buttonPanel.add(trackResourcesBtn);
+        buttonPanel.add(userPortalBtn);
+
+        //Adds panel to frame
+        frame.add(buttonPanel, BorderLayout.CENTER);
+
+        //Centres and displays
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+    }
+
+    //Method that pretends to open modules so code doesnt error
+    private static void openModule(String moduleName) {
+        JOptionPane.showMessageDialog(null, moduleName + "Opening", "Module Access", JOptionPane.INFORMATION_MESSAGE);
+    }
+}

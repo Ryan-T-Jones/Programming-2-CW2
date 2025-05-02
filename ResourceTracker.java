@@ -1,4 +1,4 @@
-package ResourceManager;
+package cw2;
 
 import javax.swing.*;
 import java.awt.*;
@@ -170,8 +170,8 @@ public class ResourceTracker extends JFrame {
         return panel;
     }
 
-    public static void main(String[] args) {
-        new ResourceTracker();
+    public static void launch() {
+        SwingUtilities.invokeLater(ResourceTracker::new);
     }
 
     class Book {
